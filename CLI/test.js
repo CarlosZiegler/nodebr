@@ -9,6 +9,7 @@ const DEFAULT_ITEM_CADASTRAR = {
     nome:"Flash",
     poder:"Speed",
     id:1
+    
 }
 
 const DEFAULT_ITEM_ATUALIZAR = {

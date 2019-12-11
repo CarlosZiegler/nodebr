@@ -25,11 +25,13 @@ class Database {
 
     async cadastrarDados(heroi) {
         const dados = await this.obterDadosArquivo()
-        const id = heroi.id <=2 ? heroi.id : Date.now()
+        const id = heroi.id < 3 ? heroi.id : dados.length+1; 
+        
+
         //concatena os dados em apenas um objeto
         const heroiComId= {
-            id,
-            ...heroi
+            ...heroi,
+            id
         }
         //concatena array
         const dadosFinal = [
