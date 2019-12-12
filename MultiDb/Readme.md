@@ -14,7 +14,7 @@ docker run --name adminer -p 8080:8080 --link postgres:postgres -d adminer
 docker run --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin -d mongo:4
 
 # cliente Grafico para Mongo db
-docker run --name mongoclient -p 3000:3000 --link mongodeb:mongodb -d mongoclient/mongoclient
+docker run --name mongoclient -p 3000:3000 --link mongodb:mongodb -d mongoclient/mongoclient
 
 # porta de acesso no Windows
 http://192.168.99.100:8080/ Postgres

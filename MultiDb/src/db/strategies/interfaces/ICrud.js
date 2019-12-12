@@ -9,7 +9,7 @@ class ICrud{
         throw new NotImplementedException
     }
 
-    read(query){
+    read(item){
         throw new NotImplementedException
     }
 
@@ -18,6 +18,9 @@ class ICrud{
     }
 
     delete(id){
+        throw new NotImplementedException
+    }
+    isConected(){
         throw new NotImplementedException
     }
     
