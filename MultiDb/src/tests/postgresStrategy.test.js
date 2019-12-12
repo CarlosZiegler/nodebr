@@ -45,9 +45,10 @@ describe('postgres Strategy', function (){
 
     it('Postgres delete', async function () {
         const [itemDeletar] = await context.read({nome : MOCK_HEROI_CADASTRAR.nome })
-        await context.delete( itemDeletar.id)
+        const result = await context.delete( itemDeletar.id)
         const [resultDados] = await context.read({id : itemDeletar.id })
         
+        assert.deepEqual(result,1)
         assert.deepEqual(resultDados,undefined)
     })
 })
