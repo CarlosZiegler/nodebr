@@ -5,6 +5,12 @@ class MongoDB extends ICrud {
     constructor(){
         super()
     }
+    isConected(){
+
+    }
+    connect(){
+
+    }
 
     create(item){
         console.log("Item foi salvo MongoDB")

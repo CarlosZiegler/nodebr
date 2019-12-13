@@ -24,3 +24,6 @@ http://192.168.99.100:3000/ Mongodb
 
 # cria um usuario no Database
 docker exec -it mongodb mongo --host localhost -u admin -p admin --authenticationDatabase admin --eval "db.getSiblingDB('herois').createUser({user:'carlos', pwd:'carlos', roles: [{role:'readWrite', db:'herois'}]})"
+
+# start containers  
+docker start $(docker ps -aq)
