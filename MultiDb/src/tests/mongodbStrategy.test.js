@@ -5,14 +5,16 @@ const Context = require('../db/strategies/base/ContextStrategy')
 const context = new Context(new MongoDB())
 
 const MOCK_HEROI_CADASTRAR = { nome : 'Gaviao Negro', poder:'flexas'}
-const MOCK_HEROI_ATUALIZAR = { nome: 'Gaviao Negro', poder: 'flexas'}
+const MOCK_HEROI_ATUALIZAR = { nome: 'Perna Longa', poder: 'Cenoura'}
+let MOCK_HEROI_ID = null
 
 describe('MongoDB Strategy', function (){
     this.timeout(Infinity)
     this.beforeAll( async function () {
        await context.connect()
        
-       //await context.create(MOCK_HEROI_ATUALIZAR)
+       const result = await context.create(MOCK_HEROI_ATUALIZAR)
+       MOCK_HEROI_ID=result._id
     })
     it('MongoDB Connection', async function () {
         const result = await context.isConected()
@@ -25,32 +27,20 @@ describe('MongoDB Strategy', function (){
     })
 
     it('MongoDB Listar', async function () {
-        const result = await context.read({nome : MOCK_HEROI_CADASTRAR.nome })
         const [{nome,poder}] = await context.read({nome : MOCK_HEROI_CADASTRAR.nome })
-        //const result = {nome,poder}
-        console.log(result)
-        assert.deepEqual(result, MOCK_HEROI_CADASTRAR)
+        const heroiResult = {nome,poder}
+        assert.deepEqual(heroiResult, MOCK_HEROI_CADASTRAR)
     })
 
     it('MongoDB update', async function () {
-        const [itemAtualizar] = await context.read({nome : MOCK_HEROI_ATUALIZAR.nome })
-        const novoItem = {
-            ...MOCK_HEROI_ATUALIZAR, 
-            nome: 'Mulher Maravilha'
-        }
-        const [result] = await context.update( itemAtualizar.id, novoItem)
-        const [resultDados] = await context.read({id : itemAtualizar.id })
+        const result= await context.update(MOCK_HEROI_ID,{nome :'Homem de Ferro' })
+        assert.deepEqual(result.nModified,1)
         
-        assert.deepEqual(result,1)
-        assert.deepEqual(resultDados.nome,novoItem.nome)
     })
 
     it('MongoDB delete', async function () {
-        const [itemDeletar] = await context.read({nome : MOCK_HEROI_CADASTRAR.nome })
-        const result = await context.delete( itemDeletar.id)
-        const [resultDados] = await context.read({id : itemDeletar.id })
+        const result= await context.delete(MOCK_HEROI_ID)
         
-        assert.deepEqual(result,1)
-        assert.deepEqual(resultDados,undefined)
+        assert.deepEqual(result.deletedCount,1)
     })
 })
