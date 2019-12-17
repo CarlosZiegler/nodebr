@@ -45,8 +45,33 @@ class HeroRoutes extends BaseRoute{
         return {
             path: '/herois',
             method:'POST',
-            handler:(request, head) =>{
-                return this.db.read()
+            config: {
+                validate: {
+                    //payload, header, params, query
+                    failAction:(request, headers, erro) =>{
+                        throw erro        
+                    },
+                    payload:{
+                        nome:Joi.string().required().min(3).max(100),
+                        poder: Joi.string().required().min(3).max(30)
+                    }
+                }
+            },
+            handler: async (request) =>{
+                try {
+                    const {nome, poder} = request.payload
+                    const item = {nome,poder}               
+                    const result = await this.db.create(item)
+                    return {
+                        message: "Heroi Cadastrado com Sucesso!",
+                        _id: result._id
+                    }
+
+                } catch (error) {
+                    console.log('Error', error)
+                    console.log('Internal Server Error')
+                }
+                
             }
         }
     }
