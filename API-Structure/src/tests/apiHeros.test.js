@@ -41,7 +41,7 @@ describe.only('API - Tests', function (){
         })
         
         const {statusCode} = result
-        assert.deepEqual(statusCode, 500)
+        assert.deepEqual(statusCode, 400)
         
 
     })
