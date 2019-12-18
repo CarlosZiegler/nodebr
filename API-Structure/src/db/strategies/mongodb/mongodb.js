@@ -1,5 +1,7 @@
 const ICrud = require('../interfaces/ICrud')
 const Mongoose = require('mongoose')
+ObjectId = require('mongodb').ObjectID;
+
 const STATUS = {
     0:"Disconnected",
     1:"Connected",
@@ -51,13 +53,12 @@ class MongoDB extends ICrud {
     }
 
     async update(id,item){
-
+        
         return await this._schema.updateOne({ _id: id }, { $set: item })
     }
 
     async delete(id){
-        return await this._schema.deleteOne({ _id: id });
-        
+        return await this._schema.deleteOne({ _id: id }); 
     }
 
 }
