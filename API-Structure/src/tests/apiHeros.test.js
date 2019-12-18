@@ -66,7 +66,7 @@ describe('API - Tests', function (){
 
     })
     it('Route /herois Paginacao com parametro String', async function () {
-        const NOME = 'Batman'
+        const NOME = MOCK_HEROI_INICIAL.nome
         const result = await app.inject({
             method:'GET',
             url:`/herois?nome=${NOME}&skip=0&limit=1`

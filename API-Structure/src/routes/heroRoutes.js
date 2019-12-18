@@ -13,6 +13,9 @@ class HeroRoutes extends BaseRoute{
             path: '/herois',
             method:'GET',
             config: {
+                tags:['api'],
+                description:'List Hero',
+                notes:'Can with Pagination anf filter per Nome',
                 validate: {
                     //payload, header, params, query
                     failAction:(request, headers, erro) =>{
@@ -47,6 +50,9 @@ class HeroRoutes extends BaseRoute{
             path: '/herois',
             method:'POST',
             config: {
+                tags:['api'],
+                description:'Create Hero',
+                notes:'Need a name and a Power ',
                 validate: {
                     //payload, header, params, query
                     failAction:(request, headers, erro) =>{
@@ -82,6 +88,9 @@ class HeroRoutes extends BaseRoute{
             path: '/herois/{id}',
             method:'PATCH',
             config: {
+                tags:['api'],
+                description:'Update Hero',
+                notes:'Update a Hero need a ID and a Atribute',
                 validate: {
                     //payload, header, params, query
                     failAction:(request, headers, erro) =>{
@@ -124,6 +133,9 @@ class HeroRoutes extends BaseRoute{
             path: '/herois/{id}',
             method:'DELETE',
             config: {
+                tags:['api'],
+                description:'Delete a Hero',
+                notes:'Delete a Hero with ID',
                 validate: {
                     //payload, header, params, query
                     failAction:(request, headers, erro) =>{
