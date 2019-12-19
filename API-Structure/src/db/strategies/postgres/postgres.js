@@ -19,12 +19,10 @@ class Postgres extends ICrud {
         
     }
 
-    async update(id,item){
-        if(!id){
-            throw Error("Impossivel atualizar um heroi sem ID")
-        }
-        //const [heroi] = await this._schema.findAll({where : id ,raw:true })
-        return await this._schema.update(item, {where : {id:id}})
+    async update(id,item,upsert = false){
+        const fn = upsert ? 'upsert':'update'
+        return await this._schema[fn](item, {where : {id:id}})
+        
     }
 
     async delete(id){

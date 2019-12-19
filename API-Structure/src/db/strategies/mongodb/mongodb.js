@@ -52,7 +52,7 @@ class MongoDB extends ICrud {
         
     }
 
-    async update(id,item){
+    async update(id,item,upsert=false){
         
         return await this._schema.updateOne({ _id: id }, { $set: item })
     }

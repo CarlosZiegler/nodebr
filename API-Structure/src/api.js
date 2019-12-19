@@ -11,6 +11,8 @@ const HerouRoute = require('./routes/heroRoutes')
 const AuthHero = require('./routes/authRoutes')
 const JWT_SECRET = 'MINHA_CHAVE_SECRETA'
 const Hapijwt = require('hapi-auth-jwt2')
+const Postgres = require('./db/strategies/postgres/postgres')
+const UsersSchema = require('./db/strategies/postgres/schemas/usersSchemas')
 
 //import Plugins for a Documentation
 const Vision = require('vision')
@@ -32,6 +34,10 @@ async function main() {
     const connection = Mongodb.connect()
     //New Context with connection and Schema
     const context = new Context(new Mongodb(connection, HeroiSchema))
+
+    const connectionpostgres = await Postgres.connect()
+    const usuarioSchema = await Postgres.defineModel(connectionpostgres,UsersSchema)
+    const contextPostgres = new Context(new Postgres(connectionpostgres,usuarioSchema))
     //options for a Swaggger Plugin
     const sawaggerOptions = {
         info: {
@@ -57,9 +63,18 @@ async function main() {
         options:{
             expiresIn: 60
         },
-        validate: (dado, request) =>{
+        validate: async(dado, request) =>{
             //verifica no banco se o usuario continua ativo, pagando
-
+            const [result]  = await contextPostgres.read(
+                {
+                    username : dado.username.toLowerCase(),
+                }
+            )
+            if (!result) {
+                return {
+                    isValid: false
+                }
+            }
             return {
                 isValid: true
             }
@@ -72,7 +87,7 @@ async function main() {
     app.route(
         [
             ...mapRoutes(new HerouRoute(context), HerouRoute.methods()),
-            ...mapRoutes(new AuthHero(JWT_SECRET), AuthHero.methods())
+            ...mapRoutes(new AuthHero(JWT_SECRET,contextPostgres), AuthHero.methods())
         ]
     )
 
