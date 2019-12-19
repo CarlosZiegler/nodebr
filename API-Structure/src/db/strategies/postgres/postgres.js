@@ -44,16 +44,17 @@ class Postgres extends ICrud {
     //Privado com underline na frente
     static async connect(){
         const connection = new Sequelize(
-            'heros',
-            'carlos',
-            'carlos',
-            { 
-                host:'192.168.99.100',
-                dialect: 'postgres',
-                quoteIdentifiers: false,
-                operatorAliases: false,
-                logging:false
-            }
+            process.env.POSTGRES_URL,                
+                    { 
+                        quoteIdentifiers: false,
+                        operatorAliases: false,
+                        logging:false,
+                        ssl: process.env.SSL_DB,
+                        dialectOptions: {
+                            ssl: process.env.SSL_DB
+                        }
+                    }
+              
         )
         
         return connection

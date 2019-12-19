@@ -2,7 +2,7 @@ const BaseRoute = require('./base/baseRoute')
 const Joi = require('joi')
 const Boom = require('boom')
 const Jwt= require('jsonwebtoken')
-const PassordHelper = require('./../helpers/passowrdHelper')
+const PassordHelper = require('./../helpers/passwordHelper')
 
 const USER = {
     username:'xuxa', 

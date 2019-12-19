@@ -1,3 +1,17 @@
+const {config } = require('dotenv')
+const {join} = require('path')
+const { ok } = require('assert')
+
+const env = process.env.NODE_ENV || "dev"
+
+ok(env ==="prod" || env=="dev", "Env is Invalid")
+
+const configPath = join(__dirname, './config',`.env.${env}`)
+
+config({
+    path:configPath
+})
+
 //npm install hapi
 //import hapi
 const Hapi = require('hapi')
@@ -9,7 +23,7 @@ const Mongodb = require('./db/strategies/mongodb/mongodb')
 const HeroiSchema = require('./db/strategies/mongodb/schemas/heroisSchema')
 const HerouRoute = require('./routes/heroRoutes')
 const AuthHero = require('./routes/authRoutes')
-const JWT_SECRET = 'MINHA_CHAVE_SECRETA'
+const JWT_SECRET = process.env.JWT_KEY
 const Hapijwt = require('hapi-auth-jwt2')
 const Postgres = require('./db/strategies/postgres/postgres')
 const UsersSchema = require('./db/strategies/postgres/schemas/usersSchemas')
@@ -21,7 +35,7 @@ const HapiSwagger = require('hapi-swagger')
 
 //new APP
 const app = new Hapi.Server({
-    port:5000
+    port:process.env.PORT
 })
 
 //List all Methods from a Instance
@@ -93,7 +107,7 @@ async function main() {
 
     //Start Server
     await app.start()
-    console.log('Servidor rodando', app.info.port)
+    console.log('Server running', app.info.port)
 
     return app
 }

@@ -1,6 +1,6 @@
 const assert = require('assert')
 const api = require('./../api')
-const PasswordHelper = require('../helpers/passowrdHelper')
+const PasswordHelper = require('../helpers/passwordHelper')
 
 let app = {}
 const SENHA = 'carlos@1984'
