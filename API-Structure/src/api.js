@@ -2,11 +2,15 @@
 //import hapi
 const Hapi = require('hapi')
 
+
 //Import Data from Database
 const Context = require('./db/strategies/base/ContextStrategy')
 const Mongodb = require('./db/strategies/mongodb/mongodb')
 const HeroiSchema = require('./db/strategies/mongodb/schemas/heroisSchema')
 const HerouRoute = require('./routes/heroRoutes')
+const AuthHero = require('./routes/authRoutes')
+const JWT_SECRET = 'MINHA_CHAVE_SECRETA'
+const Hapijwt = require('hapi-auth-jwt2')
 
 //import Plugins for a Documentation
 const Vision = require('vision')
@@ -38,6 +42,7 @@ async function main() {
 
     //register Plugins for a Documentation
     await app.register([
+        Hapijwt,
         Vision,
         Inert,
         {
@@ -45,14 +50,31 @@ async function main() {
             options: sawaggerOptions
         }
     ])
+    //Set Default JWT Strategie
 
-    //Mapping Methods from Class HeruRoute with Instance and a Result from Static Methode BaseRoute
+    app.auth.strategy('jwt','jwt', {
+        key: JWT_SECRET,
+        options:{
+            expiresIn: 60
+        },
+        validate: (dado, request) =>{
+            //verifica no banco se o usuario continua ativo, pagando
+
+            return {
+                isValid: true
+            }
+        }
+    })
+
+    app.auth.default('jwt')
+
+    //Mapping Methods from Class HeruRoute with Instance and a Result from Static Methode BaseRoute REST/SPREAT
     app.route(
-        mapRoutes(new HerouRoute(context), HerouRoute.methods())
+        [
+            ...mapRoutes(new HerouRoute(context), HerouRoute.methods()),
+            ...mapRoutes(new AuthHero(JWT_SECRET), AuthHero.methods())
+        ]
     )
-
-    
-
 
     //Start Server
     await app.start()

@@ -1,7 +1,11 @@
 const assert = require('assert')
 const api = require('./../api')
 var ObjectId = require('mongodb').ObjectID;
+const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inh1eGEiLCJpZCI6MSwiaWF0IjoxNTc2NzQxNTU5fQ.AQa-_lDsugBl-JbPFWc30EqgyHCu2j1-2DFeoUXnits"
 
+const headers = {
+    Authorization : TOKEN
+}
 let app = {}
 
 const MOCK_HEROI_CADASTRAR = {
@@ -21,7 +25,8 @@ describe('API - Tests', function (){
        const result = await app.inject({
         method:'POST',
         url:'/herois',
-        payload: MOCK_HEROI_INICIAL
+        payload: MOCK_HEROI_INICIAL,
+        headers
     })
     const dados = JSON.parse(result.payload)
 
@@ -31,7 +36,8 @@ describe('API - Tests', function (){
     it('Route /herois', async function () {
         const result = await app.inject({
             method:'GET',
-            url:'/herois?skip=0&limit=30'
+            url:'/herois?skip=0&limit=30',
+            headers
         })
         const dados = JSON.parse(result.payload)
         const {statusCode} = result
@@ -43,7 +49,8 @@ describe('API - Tests', function (){
         const TAMANHO_LIMITE = 1
         const result = await app.inject({
             method:'GET',
-            url:`/herois?skip=0&limit=${TAMANHO_LIMITE}`
+            url:`/herois?skip=0&limit=${TAMANHO_LIMITE}`,
+            headers
         })
         
         const dados = JSON.parse(result.payload)
@@ -57,7 +64,8 @@ describe('API - Tests', function (){
         const TAMANHO_LIMITE = 1
         const result = await app.inject({
             method:'GET',
-            url:`/herois?skip=eva&limit=${TAMANHO_LIMITE}`
+            url:`/herois?skip=eva&limit=${TAMANHO_LIMITE}`,
+            headers
         })
         
         const {statusCode} = result
@@ -69,7 +77,8 @@ describe('API - Tests', function (){
         const NOME = MOCK_HEROI_INICIAL.nome
         const result = await app.inject({
             method:'GET',
-            url:`/herois?nome=${NOME}&skip=0&limit=1`
+            url:`/herois?nome=${NOME}&skip=0&limit=1`,
+            headers
         })
         
         const {statusCode} = result
@@ -82,7 +91,8 @@ describe('API - Tests', function (){
         const result = await app.inject({
             method:'POST',
             url:`/herois`,
-            payload: MOCK_HEROI_CADASTRAR
+            payload: MOCK_HEROI_CADASTRAR,
+            headers
         })
         
         const { message } = JSON.parse(result.payload)
@@ -103,7 +113,8 @@ describe('API - Tests', function (){
         const result = await app.inject({
             method:'PATCH',
             url:`/herois/${id}`,
-            payload: JSON.stringify(expected)
+            payload: JSON.stringify(expected),
+            headers
         })
         
         const {statusCode} = result
@@ -121,6 +132,7 @@ describe('API - Tests', function (){
         const result = await app.inject({
             method:'DELETE',
             url:`/herois/${id}`,
+            headers
         })
         
         const {statusCode} = result
@@ -138,6 +150,7 @@ describe('API - Tests', function (){
         const result = await app.inject({
             method:'DELETE',
             url:`/herois/${id}`,
+            headers
         })
         
         const {statusCode} = result

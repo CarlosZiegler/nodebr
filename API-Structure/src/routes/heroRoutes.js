@@ -2,6 +2,10 @@ const BaseRoute = require('./base/baseRoute')
 const Joi = require('joi')
 const Boom = require('boom')
 
+const headers = Joi.object({
+    authorization: Joi.string().required()
+}).unknown()
+
 class HeroRoutes extends BaseRoute{
     constructor(db){
         super()
@@ -21,6 +25,7 @@ class HeroRoutes extends BaseRoute{
                     failAction:(request, headers, erro) =>{
                         throw erro        
                     },
+                    headers,
                     query:{
                         skip: Joi.number().integer().default(0),
                         limit:Joi.number().integer().default(100),
@@ -58,6 +63,7 @@ class HeroRoutes extends BaseRoute{
                     failAction:(request, headers, erro) =>{
                         throw erro        
                     },
+                    headers,
                     payload:{
                         nome:Joi.string().required().min(3).max(100),
                         poder: Joi.string().required().min(3).max(30)
@@ -96,6 +102,7 @@ class HeroRoutes extends BaseRoute{
                     failAction:(request, headers, erro) =>{
                         throw erro        
                     },
+                    headers,
                     params: {
                         id: Joi.string().required()
                     },
@@ -141,9 +148,11 @@ class HeroRoutes extends BaseRoute{
                     failAction:(request, headers, erro) =>{
                         throw erro        
                     },
+                    headers,
                     params: {
                         id: Joi.string().required()
-                    }
+                    },
+                    
                 }
             },
             handler: async (request) =>{
